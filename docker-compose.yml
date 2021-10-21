@@ -1,0 +1,13 @@
+version: "2"
+services:
+  docker-react:
+    container_name: matrix-website
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    volumes:
+     - ./build/:/usr/share/nginx/html
+    environment:
+      NODE_ENV: production
