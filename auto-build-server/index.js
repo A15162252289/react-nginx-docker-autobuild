@@ -36,7 +36,7 @@ handler.on('push', event => {
     event.payload.ref
   ) 
   // push请求且为master执行shell脚本
-  event.payload.ref === 'refs/heads/master' && runCommand('sh', ['./deploy.sh'], console.log)
+  event.payload.ref === 'refs/heads/master' && runCommand('sh', ['./build.sh'], console.log)
 })
 
 http

@@ -25,7 +25,10 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start-auto-build":"pm2 start ./auto-build-server/index.js --name auto-build --watch",
+    "restart":"pm2 restart auto-build",
+    "delete":"pm2 delete auto-build"
   },
   "eslintConfig": {
     "extends": "react-app"
