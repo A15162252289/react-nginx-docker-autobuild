@@ -1,13 +1,10 @@
 // app.js
 const http = require('http')
 const { spawn } = require('child_process')
-
 const createHandler = require('github-webhook-handler')
 // git仓库创建webhook的接口地址,以及密码
 const handler = createHandler({ path: '/webhook', secret: '123456' })
-
 const PORT = 3010
-console.log('listen ' + PORT)
 handler.on('issues', function(event) {
     console.log(
       'Received an issue event for %s action=%s: #%d %s',

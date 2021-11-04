@@ -1,15 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import { store } from './app/store';
+import App from 'pages/App';
+import  store  from 'state';
+import { HashRouter } from 'react-router-dom'
 import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
-
+import ThemeProvider, { ThemedGlobalStyle } from './theme'
+import { LanguageProvider } from './i18n'
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <HashRouter>
+        <LanguageProvider>
+          <ThemeProvider>
+            <ThemedGlobalStyle />
+            <App />
+          </ThemeProvider>
+        </LanguageProvider>
+      </HashRouter>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
