@@ -6,6 +6,10 @@ import BinanceList from '../../assets/images/homepage/上线币安- banner.png'
 import {Text} from 'rebass'
 import ThemeProvider from "theme";
 import useTheme from '../../hooks/useTheme';
+import {NFTInfo} from './NFTInfo'
+import FamousWord from "./FamousWord";
+import Partner from "./Partner";
+import Members from "./Members";
 const InfoWrapper = styled.div`
     width:100%;
     height:100%;
@@ -33,7 +37,7 @@ const InvestInfoWrapper=styled.div`
     width:100%;
 `
 const CardWrapper=styled.div`
-display:flex
+    display:flex
 `
 const CardLeft=styled.div`
     width:calc(50% + 59px);
@@ -171,6 +175,12 @@ export default function Info() {
             </TopInfoWrapper>
             <InvestInfo></InvestInfo>
             <WhatisInfo></WhatisInfo>
+            <NFTInfo type={'minted'}></NFTInfo>
+            <NFTInfo type={'sold'}></NFTInfo>
+            <FamousWord></FamousWord>
+            <Partner></Partner>
+            <Partner></Partner>
+            <Members></Members>
         </InfoWrapper>
     )
 }

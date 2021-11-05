@@ -11,6 +11,7 @@ import Logo, { LogoDiv } from 'components/Header/Logo';
 import LeftArrow from '../../assets/images/homepage/leftarrow.png'
 import RightArrow from '../../assets/images/homepage/rightArrow.png'
 import { url } from 'inspector';
+import StyledNavLink from 'components/LinkBtn';
 const TopViewWrapper = styled.div<{url:string}>`
     display:grid;
     width:100%;
@@ -29,7 +30,7 @@ const Slogan =styled(AutoColumn)`
 
 `
 const LogoText=styled(Text)`
-  width: 560px;
+  width: 100%;
   height: 64px;
   font-family: DIN-Bold;
   font-size: 52px;
@@ -49,22 +50,6 @@ const SloganText=styled(Text)`
     font-weight: 600;
 `
 
-const StyledNavLink = styled.div`
-    width: 123px;
-    height: 40px;
-    line-height: 40px;
-    text-align:center;
-    background:${({ theme }) => theme.bg3};
-    border-radius: 8px;
-    justify-self:left;
-    word-break: break-word;
-    overflow: hidden;
-    white-space: nowrap;
-    :hover,
-    :focus {
-      
-    }
-  `
 interface cardData {
     title?:string
     box?:string
