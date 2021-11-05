@@ -198,13 +198,13 @@ export default function Header() {
   return (
     <HeaderFrame showBackground={scrollY > 45}>
     <Logo src={GFLogoURL}></Logo>
-    <StyledNavLink id={`store-nav-link`} to={'/home'}>
+    <StyledNavLink id={`home-nav-link`} to={'/'} exact={true}>
         首页
     </StyledNavLink> 
-    <StyledNavLink id={`auction-nav-link`} to={'/auction'}>
+    <StyledNavLink id={`auction-nav-link`} to={'/auction'} exact={true}>
         拍卖
     </StyledNavLink>
-    <StyledNavLink id={`login-nav-link`} to={'/login'}>
+    <StyledNavLink id={`login-nav-link`} to={'/login'} exact={true}>
         商店
     </StyledNavLink>
     <Avatar src={avatar}></Avatar>

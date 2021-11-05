@@ -5,6 +5,8 @@ import styled from 'styled-components/macro'
 import Header from '../components/Header'
 // import Polling from '../components/Header/Polling'
 import Home from 'pages/Home'
+import { useCallback, useEffect, useRef } from 'react';
+import { useWindowSize } from '../hooks/useWindowSize';
 const AppWrapper = styled.div`
   display: flex;
   flex-flow: column;
@@ -19,9 +21,9 @@ const BodyWrapper = styled.div`
   flex: 1;
   z-index: 1;
 
-  ${({ theme }) => theme.mediaWidth.upToSmall`
-    padding: 6rem 16px 16px 16px;
-  `};
+  // ${({ theme }) => theme.mediaWidth.upToSmall`
+  //   padding: 6rem 16px 16px 16px;
+  // `};
 `
 
 const HeaderWrapper = styled.div`
@@ -47,7 +49,7 @@ export default function App() {
           </HeaderWrapper>
           <BodyWrapper>
             <Switch>
-              <Route exact strict path="/home" component={Home}/>
+              <Route exact strict path="/" component={Home}/>
               {/* <Route exact strict path="/vote/:governorIndex/:id" component={VotePage} /> */}
             </Switch>
           </BodyWrapper>

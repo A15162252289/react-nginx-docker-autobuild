@@ -3,10 +3,12 @@ import { setupListeners } from '@reduxjs/toolkit/query/react'
 import { load, save } from 'redux-localstorage-simple'
 import count from 'state/counter/counterSlice'
 import user from 'state/user/userSlice'
+import slick from 'state/slick/slickSlice'
 const store = configureStore({
   reducer: {
     count,
-    user
+    user,
+    slick
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ thunk: true }),

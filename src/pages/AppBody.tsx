@@ -1,4 +1,5 @@
-import React from 'react'
+import { useWindowSize } from 'hooks/useWindowSize'
+import React, { useCallback, useEffect, useRef } from 'react'
 import styled from 'styled-components/macro'
 import { Z_INDEX } from 'theme'
 

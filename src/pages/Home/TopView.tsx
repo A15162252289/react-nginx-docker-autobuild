@@ -1,24 +1,28 @@
 import { AutoColumn } from 'components/Column';
-import styled from 'styled-components/macro';
+import styled, { StyledComponent } from 'styled-components/macro';
 import { Text } from 'rebass'
 import { darken } from 'polished';
-import { useRef, useState,memo,useEffect } from 'react'; 
+import { useRef, useState,memo,useEffect, useCallback } from 'react'; 
 import { StackedCarousel, ResponsiveContainer, StackedCarouselSlideProps } from 'react-stacked-center-carousel';
 import  LinkDark  from '../../assets/images/token-list/lists-dark.png'
 import bannerBg from '../../assets/images/homepage/banner.png'
 import GFLogoURL from '../../assets/images/homepage/GAMER_FUTURE.png'
 import Logo, { LogoDiv } from 'components/Header/Logo';
-import LeftArrow from '../../assets/images/homepage/leftarrow.png'
-import RightArrow from '../../assets/images/homepage/rightArrow.png'
 import { url } from 'inspector';
 import StyledNavLink from 'components/LinkBtn';
+import { LeftArrowBT, RightArrowBT } from 'components/Arrow';
+import { useWindowSize } from 'hooks/useWindowSize';
+import { useAppDispatch, useAppSelector } from '../../state/hooks';
+import { updateCurrentSlickIndex } from 'state/slick/slickSlice';
+import { setInterval } from 'timers';
+
 const TopViewWrapper = styled.div<{url:string}>`
     display:grid;
     width:100%;
-    height:100%;
     background-image: url(${({ url }) => url});
+    background-size:100% 100%;
     padding-top: 112px;
-    box-sizing:border-box;
+    box-sizing:content-box;
     background-origin: content-box;
     grid-template-columns: 1fr 1fr;
 `
@@ -54,16 +58,6 @@ interface cardData {
     title?:string
     box?:string
 }
-const LeftArrowBT=styled.div`
-  width: 48px;
-  height: 48px;
-  background-image:url(${LeftArrow})
-`
-const RightArrowBT=styled.div`
-  width: 48px;
-  height: 48px;
-  background-image:url(${RightArrow})
-`
 const CivType=styled(Text)`
   width: 56px;
   height: 14px;
@@ -73,6 +67,24 @@ const CivType=styled(Text)`
   line-height: 14px;
   font-weight: 700;
 `
+const SlickWrapper=styled.div`
+  padding-right:180px;
+  box-sizing:border-box;
+  display:flex;
+  flex-direaction:column;
+  justify-content:center;
+  align-items:center;
+`
+const data = new Array(20).fill({ coverImage: "xxx", video: "xxx" })
+function getDisplay(currentIndex:number,dataIndex:number) {
+  if(currentIndex===0&&dataIndex===data.length-1){
+    return "none"
+  }
+  if(dataIndex===currentIndex-1){
+    return "none"
+  }
+  return "block"
+}
 export const DetailItem=(props:{title:string,info:string,fontSize?:string,opacity?:number})=>{
   return <div style={{display:'flex',flexDirection:'row',opacity:props.opacity??1}}>
     <Text style={{paddingRight: '5px',height: props.fontSize??'10px',fontFamily: 'STHeitiSC-Light',fontSize: props.fontSize??'10px',letterSpacing: '-0.16px',lineHeight: props.fontSize??'10px',fontWeight: 200,wordBreak: 'break-word',
@@ -81,12 +93,20 @@ export const DetailItem=(props:{title:string,info:string,fontSize?:string,opacit
     <Text style={{height: props.fontSize??'10px',fontFamily: 'STHeitiSC-Medium',fontSize: props.fontSize??'10px',letterSpacing: '-0.16px',lineHeight: props.fontSize??'10px',fontWeight: 700}}>{props.info}</Text>
   </div>
 }
-const data = new Array(20).fill({ coverImage: "xxx", video: "xxx" })
 
 function ResponsiveCarousel() {
     const ref = useRef<any>();
+    useEffect(()=>{
+      let autoSlick=setInterval(()=>{
+        ref.current?.goBack()
+      },2000)
+
+      return ()=>{
+        clearInterval(autoSlick)
+      }
+    })
     return (
-      <div style={{ position: 'relative',display:'flex',flex:'row',justifyContent:'flex-start',alignItems:'center',paddingRight:"163px" }}>
+      <div style={{ position: 'relative',display:'flex',flex:'row',justifyContent:'flex-start',alignItems:'center' ,width:'600px'}}>
         <div
             className='twitch-button left'
             onClick={() => ref.current?.goBack()}
@@ -101,14 +121,13 @@ function ResponsiveCarousel() {
                   <StackedCarousel
                       ref={carouselRef}
                       slideComponent={Slide}
-                      slideWidth={20}
+                      slideWidth={width/1.7}
                       carouselWidth={width}
                       data={data}
                       maxVisibleSlide={3}
-                      customScales={[1,0.9,0]}
-                      transitionTime={450}
-                  >
-                      
+                      customScales={[1,0.5,0]}
+                      transitionTime={600}
+                  >    
                   </StackedCarousel>
                 );
               }}
@@ -130,6 +149,8 @@ const Slide = memo(function (props: StackedCarouselSlideProps) {
     const [loadDelay, setLoadDelay] = useState<any>();
     const [removeDelay, setRemoveDelay] = useState<any>();
     const [loaded, setLoaded] = useState(false);
+    const currentIndex= useAppSelector((state) => state.slick.currentIndex)
+    const dispatch = useAppDispatch();
     useEffect(() => {
       if (isCenterSlide) {
         clearTimeout(removeDelay);
@@ -146,9 +167,12 @@ const Slide = memo(function (props: StackedCarouselSlideProps) {
     });
 
     const { coverImage } = data[dataIndex];
+    if(isCenterSlide){
+      dispatch(updateCurrentSlickIndex(dataIndex))
+    }
 
     return (
-      <div className='twitch-card' style={{background: "rgba(255,255,255,0.09)",borderRadius: "12px"}} draggable={false} onClick={() => {
+      <div className='twitch-card' style={{background: "rgba(255,255,255,0.09)",borderRadius: "12px",display:getDisplay(currentIndex,dataIndex)}} draggable={false} onClick={() => {
         if (!isCenterSlide) swipeTo(slideIndex);
       }}>
         <div className={`cover fill ${isCenterSlide && loaded ? 'off' : 'on'}`} onClick={() => {
@@ -172,8 +196,18 @@ const Slide = memo(function (props: StackedCarouselSlideProps) {
 
 
 export default function TopView() {
+  const {width}=useWindowSize()
+    let topView=useRef<any>();
+    const autoCalcHeight= useCallback(()=>{
+      // width&&(topView.current.style.width=width+'px')
+    //  width&& (topView.current.style.height=width/2.43+'px');
+        topView.current.style.height=topView.current.clientWidth/2.43+'px'
+    }, [width])
+    useEffect(() => {
+      autoCalcHeight()
+    });
     return(
-        <TopViewWrapper url={bannerBg}>
+        <TopViewWrapper url={bannerBg} ref={topView}>
             <Slogan justify={"center"}>
                 <LogoText>GAMER FUTURE</LogoText>
                 <SloganText>MATRIFI 是一个由社区驱动的元宇宙社交矩阵，基于DID技术，打造用户去中心化数字身份名片，发行下一代元宇宙社交基建单元~可生长、合成、拆卸的价值NFT，通过NFT组件在游戏里构建社交网络。</SloganText>
@@ -181,7 +215,10 @@ export default function TopView() {
                     去商店页面
                 </StyledNavLink>
             </Slogan>
-            <ResponsiveCarousel></ResponsiveCarousel>
+            <SlickWrapper>
+                <ResponsiveCarousel></ResponsiveCarousel>
+            </SlickWrapper>
+
         </TopViewWrapper>
     )
 }

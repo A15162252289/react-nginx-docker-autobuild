@@ -10,10 +10,12 @@ import {NFTInfo} from './NFTInfo'
 import FamousWord from "./FamousWord";
 import Partner from "./Partner";
 import Members from "./Members";
+import { useCallback, useEffect, useRef } from "react";
+import { useWindowSize } from '../../hooks/useWindowSize';
 const InfoWrapper = styled.div`
     width:100%;
     height:100%;
-    padding:24px 128px;
+    padding:24px  128px 94px 128px;
     // background: 0% 0% / 1440px 6476px no-repeat rgb(255, 255, 255);
     background-color:${({ theme }) => theme.bg1};
     box-sizing:border-box;
@@ -130,13 +132,21 @@ const TextItem=(props:{title:string,info:string})=>{
  </div>
 }
 const InvestInfo=()=>{
-    
+    let cardLeft=useRef<any>();
+    let {width}=useWindowSize()
+    const autoCalcHeight= useCallback(()=>{
+        let realW=cardLeft.current.clientWidth;
+        cardLeft.current.style.height=realW/1.22+'px';
+      }, [])
+      useEffect(() => {
+        autoCalcHeight()
+      },[width]);
     return <InvestInfoWrapper>
         <Text style={{height: '32px',fontFamily: 'STHeitiSC-Medium',fontSize: '28px',lineHeight: '32px',fontWeight: 700,paddingBottom:'28px',boxSizing:'content-box'}}>
             投资与回报
         </Text>
         <CardWrapper>
-            <CardLeft>
+            <CardLeft ref={cardLeft}>
                 <TextItem title={'优质的拍卖流程'} info={'一个文明的创建，不仅仅是回报，还有更多的游戏体验和创造价值的机会。'}></TextItem>
                 <TextItem title={'优质的拍卖流程'} info={'一个文明的创建，不仅仅是回报，还有更多的游戏体验和创造价值的机会。'}></TextItem>
                 <TextItem title={'优质的拍卖流程'} info={'一个文明的创建，不仅仅是回报，还有更多的游戏体验和创造价值的机会。'}></TextItem>
@@ -166,6 +176,16 @@ const WhatisInfo=()=>{
         </CardWrapperGrid>
     </InvestInfoWrapper>
 }
+const WaringText=styled.div`
+    font-family: STHeitiSC-Light;
+    font-size: 16px;
+    color: ${({theme})=>theme.text2};
+    letter-spacing: 0;
+    text-align: justify;
+    line-height: 22px;
+    font-weight: 200;
+    margin-top:100px;
+`
 export default function Info() {
     return (
         <InfoWrapper>
@@ -181,6 +201,13 @@ export default function Info() {
             <Partner></Partner>
             <Partner></Partner>
             <Members></Members>
+            <WaringText>
+            有关本网站所述投资机会的信息仅用于一般信息和营销目的，不应被视为参与任何投资活动的邀请或诱因。有关投资机会的完整而全面的信息仅适用于已获得GAMERFUTURE集团实体批准的投资者。
+<br/>
+<br/>
+你应该确保你仔细阅读风险披露声明在决定继续进行任何投资之前。GAMERFUTURE已采取措施确保活动信息清晰，公平，并且不会根据其内部验证程序产生误导。GAMERFUTURE不提供投资建议或任何投资建议。投资机会不应被视为对公众的要约，也不得针对位于非法的司法管辖区内的任何人。
+GAMERFUTURE Markets Limited由FRN 794918的金融行为监管局授权和监管
+            </WaringText>
         </InfoWrapper>
     )
 }

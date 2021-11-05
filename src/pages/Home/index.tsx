@@ -7,9 +7,10 @@ import Info from './Info';
 import Footer from './Footer';
 
 const HomeFrame = styled.div`
-    display:grid;
+    overflow-x:hidden;
+    width:100%
     // width:100vw;
-    grid-template-rows: 705px 1fr 1000px 500px;
+    // grid-template-rows: 705px 1fr 1000px 500px;
 `
 export default function Home(){
     return (
