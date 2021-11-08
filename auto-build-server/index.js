@@ -31,7 +31,7 @@ handler.on('push', event => {
     'Received a push event for %s to %s',
     event.payload.repository.name,
     event.payload.ref
-  ) 
+  )
   // push请求且为master执行shell脚本
   event.payload.ref === 'refs/heads/master' && runCommand('sh', ['./build.sh'], console.log)
 })

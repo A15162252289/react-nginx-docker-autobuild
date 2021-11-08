@@ -25,6 +25,7 @@ const TopViewWrapper = styled.div<{url:string}>`
     box-sizing:content-box;
     background-origin: content-box;
     grid-template-columns: 1fr 1fr;
+    position:relative;
 `
 const Slogan =styled(AutoColumn)`
     height:100%;
@@ -100,11 +101,11 @@ function ResponsiveCarousel() {
       let autoSlick=setInterval(()=>{
         ref.current?.goBack()
       },2000)
-
+      console.log('use')
       return ()=>{
         clearInterval(autoSlick)
       }
-    })
+    },[])
     return (
       <div style={{ position: 'relative',display:'flex',flex:'row',justifyContent:'flex-start',alignItems:'center' ,width:'600px'}}>
         <div
@@ -121,11 +122,11 @@ function ResponsiveCarousel() {
                   <StackedCarousel
                       ref={carouselRef}
                       slideComponent={Slide}
-                      slideWidth={width/1.7}
+                      slideWidth={width/2}
                       carouselWidth={width}
                       data={data}
                       maxVisibleSlide={3}
-                      customScales={[1,0.5,0]}
+                      customScales={[1,0.7,0]}
                       transitionTime={600}
                   >    
                   </StackedCarousel>
@@ -173,10 +174,10 @@ const Slide = memo(function (props: StackedCarouselSlideProps) {
 
     return (
       <div className='twitch-card' style={{background: "rgba(255,255,255,0.09)",borderRadius: "12px",display:getDisplay(currentIndex,dataIndex)}} draggable={false} onClick={() => {
-        if (!isCenterSlide) swipeTo(slideIndex);
+        if (!isCenterSlide){swipeTo((dataIndex+1) % data.length);dispatch(updateCurrentSlickIndex(dataIndex));} 
       }}>
         <div className={`cover fill ${isCenterSlide && loaded ? 'off' : 'on'}`} onClick={() => {
-              if (!isCenterSlide) swipeTo(slideIndex);
+              if (!isCenterSlide) {swipeTo((dataIndex+1) % data.length);dispatch(updateCurrentSlickIndex(dataIndex));} 
             }} style={{display:'flex',width: "180px",height: "259px",justifyContent: 'space-between',flexDirection:'column',padding:'15px',boxSizing:'border-box'}}>
           <div className='cover-image fill' style={{backgroundImage:`url(${LinkDark})`,width: '152px',height: '157px',backgroundSize:"152px 157px"}}/>
           <div style={{height:'57px',display:'flex',flexDirection:'column',justifyContent: 'space-between'}}>
@@ -193,7 +194,15 @@ const Slide = memo(function (props: StackedCarouselSlideProps) {
 });
 
 
-
+const TopLine=styled.div`
+    width: 360px;
+    height: 4px;
+    background: #FEAF25;
+    position:absolute;
+    bottom:-4px;
+    left:0;
+    z-index:999;
+`
 
 export default function TopView() {
   const {width}=useWindowSize()
@@ -208,6 +217,7 @@ export default function TopView() {
     });
     return(
         <TopViewWrapper url={bannerBg} ref={topView}>
+            <TopLine></TopLine>
             <Slogan justify={"center"}>
                 <LogoText>GAMER FUTURE</LogoText>
                 <SloganText>MATRIFI 是一个由社区驱动的元宇宙社交矩阵，基于DID技术，打造用户去中心化数字身份名片，发行下一代元宇宙社交基建单元~可生长、合成、拆卸的价值NFT，通过NFT组件在游戏里构建社交网络。</SloganText>

@@ -19,6 +19,7 @@ const InfoWrapper = styled.div`
     // background: 0% 0% / 1440px 6476px no-repeat rgb(255, 255, 255);
     background-color:${({ theme }) => theme.bg1};
     box-sizing:border-box;
+    position:relative;
 `
 const TopInfoWrapper=styled.div`
     background-color:${({ theme }) => theme.bg2};
